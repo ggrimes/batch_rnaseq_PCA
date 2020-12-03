@@ -1,30 +1,42 @@
 ---
-title: "pca"
+title: "PCA plot of sequencing runs"
 author: "Graeme Grimes"
-date: "03/12/2020"
+date: `r format(Sys.time(), "%d %B, %Y")`
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(SummarizedExperiment)
+library(PCAtools)
+library(scatterD3)
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 ```{r cars}
-summary(cars)
+se_files<-grep(pattern="archive",invert=T,dir("/scratch/u034/shared/wp5-rna-seq/analysis/rnaseq/",pattern = "salmon_merged_gene_counts.rds",recursive = T),value=T)
+
+run_names<- dirname(dirname(se_files))
+names(se_files)=run_names
+
+se_lst<-se_files %>% map(~readRDS(paste0("/scratch/u034/shared/wp5-rna-seq/analysis/rnaseq/",.x)))
+se<-purrr::invoke(SummarizedExperiment::cbind,se_lst)
+
+#clean sample id
+colData(se)$rnaseq_sample_id=gsub(colnames(se),pattern = "^X",replacement = "")
+colData(se)$rnaseq_sample_id=gsub(colData(se)$rnaseq_sample_id,pattern="\\.",replacement = "-")
+
 ```
 
-## Including Plots
+## PCA plot
 
-You can also embed plots, for example:
 
 ```{r pressure, echo=FALSE}
-plot(pressure)
+ p<-pca(log2(assays(se)$abundance+1),removeVar=0.9)
+scatterD3(p$rotated$PC1,
+          p$rotated$PC2,
+          tooltip_text=colnames(se))
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
