@@ -1,21 +1,21 @@
+params.out="${baseDir}/results"
 
 
 
-/*
-run pca on batches
-*/
+run = Channel.fromPath("$baseDir/scripts/pca.Rmd")
+
 
 process run_pca {
 
-publishDir "results"
-
-output:
-  path("pca.html")
+input:
+  path(run)
 
   script:
   """
-  #!/usr/bin/R
-  rmarkdown::render("scripts/pca.Rmd", "html_document")
+  #!/usr/bin/env Rscript
+  library(rmarkdown)
+  getwd()
+  rmarkdown::render("${run}", "html_document",output_dir="${params.out}")
   """
 
 }
