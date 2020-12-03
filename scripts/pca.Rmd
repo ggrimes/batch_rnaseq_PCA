@@ -26,16 +26,17 @@ se<-purrr::invoke(SummarizedExperiment::cbind,se_lst)
 #clean sample id
 colData(se)$rnaseq_sample_id=gsub(colnames(se),pattern = "^X",replacement = "")
 colData(se)$rnaseq_sample_id=gsub(colData(se)$rnaseq_sample_id,pattern="\\.",replacement = "-")
-
+colData(se)$nfcore_run=rep(names(se_files),sapply(se_lst,ncol))
 ```
 
 ## PCA plot
 
 
 ```{r pressure, echo=FALSE}
- p<-pca(log2(assays(se)$abundance+1),removeVar=0.9)
+ p<-pca(log2(assays(se)$abundance+1),removeVar=0.1)
 scatterD3(p$rotated$PC1,
           p$rotated$PC2,
+          col_var = coldata(se)$nfcore_run,
           tooltip_text=colnames(se))
 ```
 
