@@ -12,7 +12,6 @@ library(PCAtools)
 library(scatterD3)
 ```
 
-
 ```{r cars}
 se_files<-grep(pattern="archive",invert=T,dir("/scratch/u034/shared/wp5-rna-seq/analysis/rnaseq/",pattern = "salmon_merged_gene_counts.rds",recursive = T),value=T)
 
@@ -28,15 +27,26 @@ colData(se)$rnaseq_sample_id=gsub(colData(se)$rnaseq_sample_id,pattern="\\.",rep
 colData(se)$nfcore_run=rep(names(se_files),sapply(se_lst,ncol))
 ```
 
+## Samples
+
+```{r showsampleinfo}
+colData(se)
+```
+
 ## PCA plot
 
+Peform pca using PCAtools
 
 ```{r pressure, echo=FALSE}
  p<-pca(log2(assays(se)$abundance+1),removeVar=0.1)
 scatterD3(p$rotated$PC1,
           p$rotated$PC2,
-          col_var = coldata(se)$nfcore_run,
+          col_var = colData(se)$nfcore_run,
           tooltip_text=colnames(se))
 ```
 
+## Session Information
 
+```{r sessionInfo}
+sessionInfo()
+```
