@@ -4,7 +4,9 @@ params.out="${baseDir}/results"
 
 run = Channel.fromPath("$baseDir/scripts/pca.Rmd")
 
-
+/*
+run pca
+*/
 process run_pca {
 
 input:
