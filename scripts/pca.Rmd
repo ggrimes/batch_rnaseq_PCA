@@ -49,7 +49,7 @@ PCA removing dups and filetered samples
 
 ```{r}
 
-filtered<-read_tsv(/home/u034/ggrimes/MultiQC/filtered_rnaseq_samples_list.txt)
+filtered<-read_tsv("/home/u034/ggrimes/MultiQC/filtered_rnaseq_samples_list.txt")
 DT::datatable(filtered)
 se_filt<-se[,!colnames(se) %in% filtered$rnaseq_sample_id]
  p<-pca(log2(assays(se_filt)$abundance+1),removeVar=0.1)
