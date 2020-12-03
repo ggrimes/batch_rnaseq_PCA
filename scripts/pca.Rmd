@@ -30,7 +30,7 @@ colData(se)$nfcore_run=rep(names(se_files),sapply(se_lst,ncol))
 ## Samples
 
 ```{r showsampleinfo}
-DT::datatable(colData(se))
+DT::datatable(as.data.frame(colData(se)))
 ```
 
 ## PCA plot
