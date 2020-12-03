@@ -30,7 +30,7 @@ colData(se)$nfcore_run=rep(names(se_files),sapply(se_lst,ncol))
 ## Samples
 
 ```{r showsampleinfo}
-colData(se)
+DT::datatable(colData(se))
 ```
 
 ## PCA plot
@@ -43,6 +43,20 @@ scatterD3(p$rotated$PC1,
           p$rotated$PC2,
           col_var = colData(se)$nfcore_run,
           tooltip_text=colnames(se))
+```
+
+PCA removing dups and filetered samples
+
+```{r}
+
+filtered<-read_tsv(/home/u034/ggrimes/MultiQC/filtered_rnaseq_samples_list.txt)
+DT::datatable(filtered)
+se_filt<-se[,!colnames(se) %in% filtered$rnaseq_sample_id]
+ p<-pca(log2(assays(se_filt)$abundance+1),removeVar=0.1)
+scatterD3(p$rotated$PC1,
+          p$rotated$PC2,
+          col_var = colData(se_filt)$nfcore_run,
+          tooltip_text=colnames(se_filt))
 ```
 
 ## Session Information
