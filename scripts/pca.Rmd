@@ -13,7 +13,7 @@ library(scatterD3)
 library(plotly)
 ```
 
-```{r cars}
+```{r readdata}
 se_files<-grep(pattern="archive",invert=T,dir("/scratch/u034/shared/wp5-rna-seq/analysis/rnaseq/",pattern = "salmon_merged_gene_counts.rds",recursive = T),value=T)
 
 run_names<- dirname(dirname(se_files))
@@ -40,7 +40,7 @@ DT::datatable(as.data.frame(colData(se)))
 
 Peform pca using PCAtools Log2(TPM+1)
 
-```{r pressure, echo=FALSE}
+```{r pcaplot}
  p<-pca(log2(assays(se)$abundance+1),removeVar=0.1)
 scatterD3(p$rotated$PC1,
           p$rotated$PC2,
@@ -59,7 +59,7 @@ plotly::ggplotly(ggp)
 
 PCA removing dups and filtered samples
 
-```{r}
+```{r pca_filtered}
 
 filtered<-read_tsv("/home/u034/ggrimes/MultiQC/filtered_rnaseq_samples_list.txt")
 DT::datatable(filtered)
@@ -81,11 +81,7 @@ ggp<-p$rotated %>%
 plotly::ggplotly(ggp)
 ```
 
-## 
 
-```{r batchcorr}
-
-```
 
 ## RDS Export
 
