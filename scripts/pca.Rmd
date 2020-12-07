@@ -40,7 +40,7 @@ DT::datatable(as.data.frame(colData(se)))
 
 Peform pca using PCAtools Log2(TPM+1)
 
-```{r pcaplot}
+```{r pcaplot, fig.width = 12, fig.height=12}
  p<-pca(log2(assays(se)$abundance+1),removeVar=0.1)
 scatterD3(p$rotated$PC1,
           p$rotated$PC2,
@@ -59,7 +59,7 @@ plotly::ggplotly(ggp)
 
 PCA removing dups and filtered samples
 
-```{r pca_filtered}
+```{r pca_filtered, fig.width = 12, fig.height=12}
 
 filtered<-read_tsv("/home/u034/ggrimes/MultiQC/filtered_rnaseq_samples_list.txt")
 DT::datatable(filtered)
