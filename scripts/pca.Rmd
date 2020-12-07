@@ -10,6 +10,7 @@ library(tidyverse)
 library(SummarizedExperiment)
 library(PCAtools)
 library(scatterD3)
+library(limma)
 ```
 
 ```{r cars}
@@ -60,6 +61,20 @@ scatterD3(p$rotated$PC1,
           p$rotated$PC2,
           col_var = colData(se_filt)$nfcore_run,
           tooltip_text=colnames(se_filt))
+```
+
+## 
+
+```{r batchcorr}
+
+```
+
+## RDS Export
+
+```{r rds_out}
+saveRDS(se,"se.rds")
+saveRDS(se_filt,"se_filt.rds")
+
 ```
 
 ## Session Information
