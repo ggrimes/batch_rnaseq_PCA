@@ -10,7 +10,7 @@ library(tidyverse)
 library(SummarizedExperiment)
 library(PCAtools)
 library(scatterD3)
-library(limma)
+library(plotly)
 ```
 
 ```{r cars}
@@ -38,7 +38,7 @@ DT::datatable(as.data.frame(colData(se)))
 
 ## PCA plot
 
-Peform pca using PCAtools
+Peform pca using PCAtools Log2(TPM+1)
 
 ```{r pressure, echo=FALSE}
  p<-pca(log2(assays(se)$abundance+1),removeVar=0.1)
@@ -46,9 +46,18 @@ scatterD3(p$rotated$PC1,
           p$rotated$PC2,
           col_var = colData(se)$nfcore_run,
           tooltip_text=colnames(se))
+
+ggp<-p$rotated %>% 
+  as_tibble(rownames="rnaseq_sample_id") %>%  
+  mutate(nfrun=se$nfcore_run) %>% 
+  ggplot(aes(x=PC1,y=PC2,label=rnaseq_sample_id))+
+  geom_point(alpha=0.1)+facet_wrap(~nfrun)+
+  theme_light()+
+  geom_text(size=0.3)
+plotly::ggplotly(ggp)
 ```
 
-PCA removing dups and filetered samples
+PCA removing dups and filtered samples
 
 ```{r}
 
@@ -61,6 +70,15 @@ scatterD3(p$rotated$PC1,
           p$rotated$PC2,
           col_var = colData(se_filt)$nfcore_run,
           tooltip_text=colnames(se_filt))
+
+ggp<-p$rotated %>% 
+  as_tibble(rownames="rnaseq_sample_id") %>%  
+  mutate(nfrun=se$nfcore_run) %>% 
+  ggplot(aes(x=PC1,y=PC2,label=rnaseq_sample_id))+
+  geom_point(alpha=0.1)+facet_wrap(~nfrun)+
+  theme_light()+
+  geom_text(size=0.3)
+plotly::ggplotly(ggp)
 ```
 
 ## 
