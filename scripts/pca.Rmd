@@ -25,6 +25,8 @@ se<-purrr::invoke(SummarizedExperiment::cbind,se_lst)
 colData(se)$rnaseq_sample_id=gsub(colnames(se),pattern = "^X",replacement = "")
 colData(se)$rnaseq_sample_id=gsub(colData(se)$rnaseq_sample_id,pattern="\\.",replacement = "-")
 colData(se)$nfcore_run=rep(names(se_files),sapply(se_lst,ncol))
+
+colnames(se)<-colData(se)$rnaseq_sample_id
 ```
 
 ## Samples
@@ -52,6 +54,7 @@ PCA removing dups and filetered samples
 filtered<-read_tsv("/home/u034/ggrimes/MultiQC/filtered_rnaseq_samples_list.txt")
 DT::datatable(filtered)
 se_filt<-se[,!colnames(se) %in% filtered$rnaseq_sample_id]
+dim(se_filt)
  p<-pca(log2(assays(se_filt)$abundance+1),removeVar=0.1)
 scatterD3(p$rotated$PC1,
           p$rotated$PC2,
