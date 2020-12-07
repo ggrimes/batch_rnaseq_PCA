@@ -73,7 +73,7 @@ scatterD3(p$rotated$PC1,
 
 ggp<-p$rotated %>% 
   as_tibble(rownames="rnaseq_sample_id") %>%  
-  mutate(nfrun=se$nfcore_run) %>% 
+  mutate(nfrun=se_filt$nfcore_run) %>% 
   ggplot(aes(x=PC1,y=PC2,label=rnaseq_sample_id))+
   geom_point(alpha=0.1)+facet_wrap(~nfrun)+
   theme_light()+
